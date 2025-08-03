@@ -6,6 +6,20 @@ import readline from 'node:readline';
 
 // 任务目录路径
 const tasksDir = path.resolve('src/tasks');
+const lastEmailLogPath = path.resolve('./log/last_email_reminder.log');
+
+// 删除上次提醒时间日志（如果存在）
+function deleteLastEmailLog() {
+  try {
+    if (fs.existsSync(lastEmailLogPath)) {
+      fs.unlinkSync(lastEmailLogPath);
+      console.log('🗑️ 已清除上次提醒时间日志');
+    }
+  }
+  catch (err) {
+    console.warn('⚠️ 无法删除提醒日志：', err);
+  }
+}
 
 // 获取所有任务文件夹名
 function getTaskFolders(dir: string): string[] {
@@ -19,7 +33,7 @@ function getTaskFolders(dir: string): string[] {
   );
 }
 
-// 控制台选择
+// 控制台选择任务
 async function chooseTask(tasks: string[]): Promise<string> {
   console.log('\n可用任务：');
   tasks.forEach((name, i) => console.log(`  [${i + 1}] ${name}`));
@@ -66,6 +80,8 @@ function runTask(taskName: string) {
 
 // 主函数
 async function main() {
+  deleteLastEmailLog(); // 每次启动前清除提醒日志
+
   const tasks = getTaskFolders(tasksDir);
   if (tasks.length === 0) {
     console.error('❌ 没有找到任何任务文件夹');

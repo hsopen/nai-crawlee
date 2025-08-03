@@ -15,12 +15,16 @@
     "commander": "^14.0.0",
     "crawlee": "^3.14.0",
     "fast-xml-parser": "^5.2.5",
+    "node-notifier": "^10.0.1",
+    "nodemailer": "^7.0.5",
     "playwright": "^1.54.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.1.0",
     "@types/node": "^24.1.0",
+    "@types/node-notifier": "^8.0.5",
+    "@types/nodemailer": "^6.4.17",
     "eslint": "^9.32.0",
     "tsx": "^4.20.3",
     "typescript": "^5.5.3"
