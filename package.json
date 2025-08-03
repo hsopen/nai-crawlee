@@ -1,19 +1,28 @@
 {
   "name": "nai-crawlee",
+  "type": "module",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "ct": "tsx ./src/scripts/createTask.ts",
+    "rt": "tsx ./src/scripts/runTask.ts",
+    "at": "tsx ./src/scripts/runArchive.ts"
+  },
+  "dependencies": {
+    "camoufox-js": "^0.6.2",
+    "commander": "^14.0.0",
+    "crawlee": "^3.14.0",
+    "fast-xml-parser": "^5.2.5",
+    "playwright": "^1.54.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^5.1.0",
     "@types/node": "^24.1.0",
+    "eslint": "^9.32.0",
     "tsx": "^4.20.3",
     "typescript": "^5.5.3"
-  },
-  "private": true,
-  "dependencies": {
-    "crawlee": "^3.14.0",
-    "playwright": "^1.54.1"
   }
 }
