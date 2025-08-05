@@ -11,11 +11,24 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
   const cags = await page.$$eval('', els => els.map(el => el.textContent?.trim() || ''));
 
   let att1Name = '';
-  let att1Values: string[] = await page.$$eval('', els => els.map(el => el.textContent || ''));
+  let att1Values: string[] = [];
   let att2Name = '';
   let att2Values: string[] = [];
   let att3Name = '';
   let att3Values: string[] = [];
+
+  try {
+    att1Values = await page.$$eval('', els => els.map(el => el.textContent || ''));
+  }
+  catch { }
+  try {
+    att2Values = await page.$$eval('', els => els.map(el => el.textContent || ''));
+  }
+  catch { }
+  try {
+    att3Values = await page.$$eval('', els => els.map(el => el.textContent || ''));
+  }
+  catch { }
 
   if (att1Values.length === 0 && att2Values.length === 0 && att3Values.length === 0) {
     log.warning('所有属性都为空，进行默认处理');
@@ -115,6 +128,6 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
     att3Name,
     att3Values,
   });
-
-  Dataset.pushData(productInfo);
+  const dataset = await Dataset.open('tasks_id');
+  await dataset.pushData(productInfo);
 }

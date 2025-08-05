@@ -19,7 +19,7 @@ const config = new Configuration({
 
 // 错误记录缓存
 const errorLogCache: { url: string; timestamp: number; message: string }[] = [];
-const ERROR_THRESHOLD = 10; // 错误数阈值
+const ERROR_THRESHOLD = 20; // 错误数阈值
 const TIME_WINDOW = 3 * 60 * 1000; // 时间窗口，单位毫秒（3 分钟）
 
 const crawler = new PlaywrightCrawler({
@@ -30,13 +30,13 @@ const crawler = new PlaywrightCrawler({
     }),
   },
   headless: false,
-  maxRequestRetries: 2,
+  maxRequestRetries: 3,
   maxConcurrency: 5,
   minConcurrency: 2,
   maxRequestsPerCrawl: 5,
   proxyConfiguration,
   browserPoolOptions: {
-    useFingerprints: false,
+    useFingerprints: true,
   },
   postNavigationHooks: [
     async ({ handleCloudflareChallenge }) => {
@@ -47,13 +47,13 @@ const crawler = new PlaywrightCrawler({
     async ({ handleCloudflareChallenge }) => {
       await handleCloudflareChallenge();
     },
-    async ({ page }) => {
-      await page.route('**/*', (route) => {
-        return ['image', 'stylesheet', 'font'].includes(route.request().resourceType())
-          ? route.abort()
-          : route.continue();
-      });
-    },
+    // async ({ page }) => {
+    //   await page.route('**/*', (route) => {
+    //     return ['image', 'stylesheet', 'font'].includes(route.request().resourceType())
+    //       ? route.abort()
+    //       : route.continue();
+    //   });
+    // },
   ],
   requestHandler: productRequestHandler,
 

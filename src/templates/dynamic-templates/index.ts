@@ -6,17 +6,26 @@ import crawler from './ruler.js';
 
 (async () => {
   const sites = await extractLocalSitemapLinks('./');
+
   const INCLUDE_KEYWORD = '';
   const EXCLUDE_KEYWORD = '';
+
   const filteredSites = sites.filter((url) => {
+    // 类型校验 + 必须以 http/https 开头
+    const isValidUrl = typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://'));
+    if (!isValidUrl)
+      return false;
+    // 包含关键字（可为空）判断
     const includePass = !INCLUDE_KEYWORD || url.includes(INCLUDE_KEYWORD);
+    // 排除关键字（可为空）判断
     const excludePass = !EXCLUDE_KEYWORD || !url.includes(EXCLUDE_KEYWORD);
     return includePass && excludePass;
   });
   const siteNum = filteredSites.length;
-  log.info(`获取了${siteNum}个符合条件的链接`);
+  log.info(`获取了 ${siteNum} 个符合条件的链接`);
   await crawler.run(filteredSites);
-  await Dataset.exportToCSV('default');
+  const dataset = await Dataset.open('tasks_id');
+  await dataset.exportToCSV('default');
   renameMoveCsv('tasks_id');
   completeAndRunNext('time_task_id');
 })();
