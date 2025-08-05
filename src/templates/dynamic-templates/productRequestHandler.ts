@@ -71,12 +71,12 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
 
   if (att1Buttons.length === 1) {
     const price = await page.$eval('', el => el.textContent?.trim() || '');
-    const imageSrc = await page.$$eval('', (imgs) => {
-      const lastImg = imgs[imgs.length - 1];
-      return lastImg?.getAttribute('src') || '';
-    });
+    const imageSrcs = await page.$$eval(
+      'div.for-desktop:nth-child(1) > div:nth-child(1) > div:nth-child(1) ul li img',
+      imgs => imgs.map(img => img.getAttribute('src') || ''),
+    );
     prices.push(price);
-    images.push(imageSrc);
+    images.push(...imageSrcs);
   }
   else {
     for (const button of att1Buttons) {
