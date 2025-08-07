@@ -11,3 +11,6 @@ yarn-error.log*
 /log
 /src/**/*.xml
 /storage
+
+/src/Archive
+/src/tasks
