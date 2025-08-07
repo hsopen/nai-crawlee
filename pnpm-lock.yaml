@@ -26,6 +26,9 @@ importers:
       fast-xml-parser:
         specifier: ^5.2.5
         version: 5.2.5
+      jsdom:
+        specifier: ^26.1.0
+        version: 26.1.0
       node-notifier:
         specifier: ^10.0.1
         version: 10.0.1
@@ -42,6 +45,9 @@ importers:
       '@antfu/eslint-config':
         specifier: ^5.1.0
         version: 5.1.0(@vue/compiler-sfc@3.5.18)(eslint@9.32.0)(typescript@5.8.3)
+      '@types/jsdom':
+        specifier: ^21.1.7
+        version: 21.1.7
       '@types/node':
         specifier: ^24.1.0
         version: 24.1.0
