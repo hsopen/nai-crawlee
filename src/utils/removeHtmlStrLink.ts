@@ -38,5 +38,6 @@ export function removeHtmlStrLink(html: string): string {
 
   const cleanedHtml = document.body.innerHTML;
 
-  return cleanedHtml.trim();
+  return cleanedHtml
+    .trim();
 }
