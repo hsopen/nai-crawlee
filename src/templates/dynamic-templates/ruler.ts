@@ -1,6 +1,6 @@
-import { launchOptions } from 'camoufox-js';
+// import { launchOptions } from 'camoufox-js';
 import { Configuration, log, PlaywrightCrawler, ProxyConfiguration } from 'crawlee';
-import { firefox } from 'playwright';
+// import { firefox } from 'playwright';
 // 假设 errorReminder 函数已定义
 import { errorReminder } from '../../utils/errorReminder.js';
 
@@ -23,12 +23,12 @@ const ERROR_THRESHOLD = 20; // 错误数阈值
 const TIME_WINDOW = 3 * 60 * 1000; // 时间窗口，单位毫秒（3 分钟）
 
 const crawler = new PlaywrightCrawler({
-  launchContext: {
-    launcher: firefox,
-    launchOptions: await launchOptions({
-      headless: false,
-    }),
-  },
+  // launchContext: {
+  //   launcher: firefox,
+  //   launchOptions: await launchOptions({
+  //     headless: false,
+  //   }),
+  // },
   headless: false,
   maxRequestRetries: 3,
   maxConcurrency: 5,
