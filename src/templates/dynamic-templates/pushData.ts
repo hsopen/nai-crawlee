@@ -13,6 +13,7 @@ interface ProductInfoParams {
   att2Values: string[];
   att3Name: string;
   att3Values: string[];
+  URL: string;
 }
 
 export function buildProductInfo({
@@ -27,6 +28,7 @@ export function buildProductInfo({
   att2Values,
   att3Name,
   att3Values,
+  URL,
 }: ProductInfoParams): ProductCsvRow {
   return {
     'Type': 'variable',
@@ -81,5 +83,6 @@ export function buildProductInfo({
     'zcp': prices.map(el => el.replace(/[^0-9.]/g, '') || '').join(','),
     'Sub_sku': '',
     'Rec': 1,
+    URL,
   };
 }

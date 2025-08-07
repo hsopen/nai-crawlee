@@ -127,6 +127,7 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
     att2Values,
     att3Name,
     att3Values,
+    URL: request.url,
   });
   const dataset = await Dataset.open('tasks_id');
   await dataset.pushData(productInfo);
