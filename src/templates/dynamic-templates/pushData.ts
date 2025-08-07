@@ -1,5 +1,6 @@
 import type { ProductCsvRow } from '../../types/ProductCsvRow.js';
 import { v7 as uuidv7 } from 'uuid';
+import { removeHtmlStrLink } from '../../utils/removeHtmlStrLink.js';
 
 interface ProductInfoParams {
   name: string;
@@ -38,7 +39,7 @@ export function buildProductInfo({
     'Is featured?': '',
     'Visibility in catalog': 'visible',
     'Short description': '',
-    'Description': desc?.replace(/^[\s\u200B-\u200D]+|[\s\u200B-\u200D]+$/g, '') || '',
+    'Description': removeHtmlStrLink(desc?.replace(/^[\s\u200B-\u200D]+|[\s\u200B-\u200D]+$/g, '') || ''),
     'Date sale price starts': '',
     'Date sale price ends': '',
     'Tax status': 'taxable',
