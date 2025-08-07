@@ -11,9 +11,11 @@
     "at": "tsx ./src/scripts/runArchive.ts"
   },
   "dependencies": {
+    "@fast-csv/format": "^5.0.5",
     "camoufox-js": "^0.6.2",
     "commander": "^14.0.0",
     "crawlee": "^3.14.0",
+    "fast-csv": "^5.0.5",
     "fast-xml-parser": "^5.2.5",
     "node-notifier": "^10.0.1",
     "nodemailer": "^7.0.5",
