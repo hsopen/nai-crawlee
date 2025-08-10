@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer';
 // ====== 可配置项 ======
 const EMAIL_CONFIG = {
   user: '2279107415@qq.com',
-  pass: 'qsmeenikbwatecfh', // 请使用你的 QQ 邮箱授权码
+  pass: '', // 请使用你的 QQ 邮箱授权码
   to: '2279107415@qq.com',
   service: 'qq',
   host: 'smtp.qq.com',
