@@ -5,8 +5,15 @@ import { buildProductInfo } from './pushData.js';
 export async function productRequestHandler(context: PlaywrightCrawlingContext) {
   const { page, request } = context;
   log.info(`正在抓取：${request.url}`);
+  let name = '';
+  if (await page.$('.variants__item--column:nth-child(1) .small-reg')) {
+    log.info('这是一个变体产品页面，开始处理');
+    name = `${(await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim()} - ${await page.$eval('.variants__item--column:nth-child(1) .small-reg', el => el.textContent || '')}`;
+  }
+  else {
+    name = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || ''));
+  }
 
-  const name = await page.$eval('', el => el.textContent || '');
   const desc = await page.$eval('', el => el.innerHTML || '');
   const cags = await page.$$eval('', els => els.map(el => el.textContent?.trim() || ''));
 
@@ -127,7 +134,7 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
     att2Values,
     att3Name,
     att3Values,
-    URL: request.url,
+    url: request.url,
   });
   const dataset = await Dataset.open('tasks_id');
   await dataset.pushData(productInfo);
