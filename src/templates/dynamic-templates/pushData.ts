@@ -14,7 +14,7 @@ interface ProductInfoParams {
   att2Values: string[];
   att3Name: string;
   att3Values: string[];
-  URL: string;
+  url: string;
 }
 
 export function buildProductInfo({
@@ -29,7 +29,7 @@ export function buildProductInfo({
   att2Values,
   att3Name,
   att3Values,
-  URL,
+  url,
 }: ProductInfoParams): ProductCsvRow {
   return {
     'Type': 'variable',
@@ -59,7 +59,16 @@ export function buildProductInfo({
     'Categories': cags.map(el => el?.replace(/^[\s\u200B-\u200D]+|[\s\u200B-\u200D]+$/g, '') || '').join('>'),
     'Tags': '',
     'Shipping class': '',
-    'Images': images.map(url => url.startsWith('//') ? `https:${url}` : url).join(','),
+    'Images': images.map((u) => {
+      const baseUrl = u?.split(/[;?]/)[0];
+      if (baseUrl?.startsWith('//'))
+        return `https:${baseUrl}`;
+      if (baseUrl?.startsWith('/'))
+        return new URL(url).origin + baseUrl;
+      return baseUrl;
+    })
+      .filter(u => u?.startsWith('http://') || u?.startsWith('https://'))
+      .join(','),
     'Download limit': '',
     'Download expiry days': '',
     'Parent': '',
@@ -84,6 +93,6 @@ export function buildProductInfo({
     'zcp': prices.map(el => el.replace(/[^0-9.]/g, '') || '').join(','),
     'Sub_sku': '',
     'Rec': 1,
-    URL,
+    'URL': url,
   };
 }
