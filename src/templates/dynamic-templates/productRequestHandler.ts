@@ -11,7 +11,8 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
     name = `${(await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim()} - ${await page.$eval('.variants__item--column:nth-child(1) .small-reg', el => el.textContent || '')}`;
   }
   else {
-    name = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || ''));
+    const productName = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim();
+    name = productName;
   }
 
   const desc = await page.$eval('', el => el.innerHTML || '');
