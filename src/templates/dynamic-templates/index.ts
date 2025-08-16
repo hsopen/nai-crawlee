@@ -2,7 +2,7 @@ import { Dataset, log } from 'crawlee';
 import { extractLocalSitemapLinks } from '../../utils/readLocalSitemap.js';
 import { renameMoveCsv } from '../../utils/renameMoveCsv.js';
 import { completeAndRunNext } from '../../utils/runNextTask.js';
-import crawler from './ruler.js';
+import { crawler, startCrawler } from './ruler.js';
 
 (async () => {
   const sites = await extractLocalSitemapLinks('./');
@@ -23,6 +23,7 @@ import crawler from './ruler.js';
   });
   const siteNum = filteredSites.length;
   log.info(`获取了 ${siteNum} 个符合条件的链接`);
+  await startCrawler();
   await crawler.run(filteredSites);
   const dataset = await Dataset.open('tasks_id');
   await dataset.exportToCSV('default');

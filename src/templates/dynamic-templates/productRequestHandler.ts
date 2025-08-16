@@ -6,14 +6,13 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
   const { page, request } = context;
   log.info(`正在抓取：${request.url}`);
   let name = '';
+  const productName = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim();
+  let variantName = '';
   if (await page.$('.variants__item--column:nth-child(1) .small-reg')) {
     log.info('这是一个变体产品页面，开始处理');
-    name = `${(await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim()} - ${await page.$eval('.variants__item--column:nth-child(1) .small-reg', el => el.textContent || '')}`;
+    variantName = (await page.$eval('.variants__item--column:nth-child(1) .small-reg', el => el.textContent || '')).trim();
   }
-  else {
-    const productName = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim();
-    name = productName;
-  }
+  name = variantName ? `${productName} - ${variantName}` : productName;
 
   const desc = await page.$eval('', el => el.innerHTML || '');
   const cags = await page.$$eval('', els => els.map(el => el.textContent?.trim() || ''));
