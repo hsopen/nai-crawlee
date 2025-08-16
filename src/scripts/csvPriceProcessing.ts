@@ -10,16 +10,33 @@ interface ProcessOptions {
 
 // 处理单个价格文本
 function processSinglePrice(price: string): string {
-  const strValue = String(price).trim();
-  const parts = strValue.split('.');
+  let strValue = String(price).trim();
 
-  if (parts.length <= 2) {
-    return strValue;
+  // 全角数字和全角点转半角
+  strValue = strValue.replace(/[０１２３４５６７８９]/g, s => String.fromCharCode(s.charCodeAt(0) - 65248));
+  strValue = strValue.replace(/．/g, '.');
+
+  // 去除括号
+  strValue = strValue.replace(/[()]/g, '');
+
+  // 去除首尾非数字、非负号、非小数点字符（用\D替换[^0-9]）
+  strValue = strValue.replace(/^[^\d.-]+/, '').replace(/\D+$/, '');
+
+  // 去除开头和结尾的小数点
+  strValue = strValue.replace(/^\./, '').replace(/\.$/, '');
+
+  // 只保留第一个小数点，去除多余的小数点
+  const firstDot = strValue.indexOf('.');
+  if (firstDot !== -1) {
+    strValue = strValue.slice(0, firstDot + 1) + strValue.slice(firstDot + 1).replace(/\./g, '');
   }
 
-  const beforeDecimal = parts.slice(0, -1).join('');
-  const afterDecimal = parts[parts.length - 1];
-  return `${beforeDecimal}.${afterDecimal}`;
+  // 允许负号在最前面，且为有效数字
+  if (/^-?\d+(?:\.\d+)?$/.test(strValue)) {
+    return strValue;
+  }
+  // 如果处理后不是有效数字，返回原始值
+  return String(price).trim();
 }
 
 // 处理可能包含多个价格的单元格
