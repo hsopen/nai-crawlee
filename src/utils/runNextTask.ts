@@ -31,16 +31,12 @@ export function completeAndRunNext(currentTask: string) {
 
     if (fs.existsSync(taskPath)) {
       console.log(`[调度器] 即将执行下一个任务：${nextTask}`);
-      const child = exec(`tsx ${taskPath}`, (err) => {
+      exec(`tsx ${taskPath}`, (err) => {
         if (err) {
           console.error(`[调度器] 执行 ${nextTask} 失败:`, err);
         }
       });
-
-      // 实时输出 stdout 和 stderr 到主控制台
-      child.stdout?.on('data', data => process.stdout.write(data));
-      child.stderr?.on('data', data => process.stderr.write(data));
-
+      // 不输出 stdout 和 stderr
       return;
     }
     else {
