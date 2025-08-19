@@ -24,12 +24,10 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^5.1.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.1.0",
     "@types/node-notifier": "^8.0.5",
     "@types/nodemailer": "^6.4.17",
-    "eslint": "^9.32.0",
     "tsx": "^4.20.3",
     "typescript": "^5.5.3"
   }
