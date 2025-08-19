@@ -2,17 +2,32 @@ import type { PlaywrightCrawlingContext } from 'crawlee';
 import { Dataset, log } from 'crawlee';
 import { buildProductInfo } from './pushData.js';
 
+// 处理前尝试点击关闭弹窗按钮
+async function tryClosePopup(page: any) {
+  try {
+    const closeBtn = await page.$('body > div:nth-child(111) > div > div:nth-child(2) > div > div > div > div > div > button');
+    if (closeBtn) {
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+    }
+  }
+  catch { }
+}
+
 export async function productRequestHandler(context: PlaywrightCrawlingContext) {
   const { page, request } = context;
   log.info(`正在抓取：${request.url}`);
+
+  await tryClosePopup(page);
+
   let name = '';
   const productName = (await page.$eval('.pdp-top__product-name__not-ot', el => el.textContent || '')).trim();
   let variantName = '';
   if (await page.$('.variants__item--column:nth-child(1) .small-reg')) {
-    log.info('这是一个变体产品页面，开始处理');
     variantName = (await page.$eval('.variants__item--column:nth-child(1) .small-reg', el => el.textContent || '')).trim();
   }
   name = variantName ? `${productName} - ${variantName}` : productName;
+  await tryClosePopup(page);
 
   const desc = await page.$eval('', el => el.innerHTML || '');
   const cags = await page.$$eval('', els => els.map(el => el.textContent?.trim() || ''));
@@ -37,8 +52,9 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
   }
   catch { }
 
+  // No attribute values found, nothing to process in this block
   if (att1Values.length === 0 && att2Values.length === 0 && att3Values.length === 0) {
-    log.warning('所有属性都为空，进行默认处理');
+    // Intentionally left blank
   }
   else {
     if (att1Values.length === 0) {
@@ -69,6 +85,7 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
       att3Name = '';
     }
   }
+  await tryClosePopup(page);
 
   const att1Buttons = await page.$$('');
   let prices = [];
@@ -77,6 +94,8 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
   const att3Set = att3Values.length > 0 ? att3Values : [''];
 
   if (att1Buttons.length === 1) {
+    await tryClosePopup(page);
+
     const price = await page.$eval('', el => el.textContent?.trim() || '');
     const imageSrcs = await page.$$eval(
       'div.for-desktop:nth-child(1) > div:nth-child(1) > div:nth-child(1) ul li img',
@@ -87,11 +106,14 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
   }
   else {
     for (const button of att1Buttons) {
+      await tryClosePopup(page);
       await button.click();
+      await tryClosePopup(page);
       await page.waitForTimeout(1000);
       let price = '';
       try {
         price = await page.$eval('', el => el.textContent?.trim() || '');
+        await tryClosePopup(page);
       }
       catch {
         price = '';
@@ -103,6 +125,7 @@ export async function productRequestHandler(context: PlaywrightCrawlingContext) 
       catch {
         imageSrcs = [];
       }
+      await tryClosePopup(page);
       const uniqueImages = [...new Set(imageSrcs)];
       images.push(...uniqueImages);
       const comboCount = att2Set.length * att3Set.length;
